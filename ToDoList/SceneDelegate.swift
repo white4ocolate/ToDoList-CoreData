@@ -1,9 +1,3 @@
-//
-//  SceneDelegate.swift
-//  ToDoList
-//
-//  Created by white4ocolate on 05.12.2023.
-//
 
 import UIKit
 
