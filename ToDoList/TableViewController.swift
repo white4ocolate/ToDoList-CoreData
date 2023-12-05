@@ -4,7 +4,7 @@ import CoreData
 
 class TableViewController: UITableViewController {
 
-    var tasks:[String] = []
+    var tasks: [Task] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -16,15 +16,12 @@ class TableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
-    
     @IBAction func addTask(_ sender: UIBarButtonItem) {
-        print("hello")
         let alertController = UIAlertController(title: "New Task", message: "Please add new task", preferredStyle: .alert)
         let saveAction = UIAlertAction(title: "Save", style: .default) { action in
             let textField = alertController.textFields?.first
             if let newTaskTitle = textField?.text {
-//                self.saveTask(withTitle: newTaskTitle)
-                self.tasks.append(newTaskTitle)
+                self.saveTask(withTitle: newTaskTitle)
                 self.tableView.reloadData()
             }
         }
@@ -35,9 +32,9 @@ class TableViewController: UITableViewController {
         self.present(alertController, animated: true)
     }
     
-//    private saveTask(withTitle task: String) {
-//        self.tasks.append(task)
-//    }
+    private func saveTask(withTitle task: String) {
+        
+    }
     
     // MARK: - Table view data source
 
@@ -55,7 +52,8 @@ class TableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
-        cell.textLabel?.text = tasks[indexPath.row]
+        let task = tasks[indexPath.row]
+        cell.textLabel?.text = task.title
 
         return cell
     }
