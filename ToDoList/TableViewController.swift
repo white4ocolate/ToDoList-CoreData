@@ -27,13 +27,26 @@ class TableViewController: UITableViewController {
         }
         alertController.addTextField(configurationHandler: nil)
         let cancelAction = UIAlertAction(title: "Cancel", style: .default)
+        
         alertController.addAction(saveAction)
         alertController.addAction(cancelAction)
         self.present(alertController, animated: true)
     }
     
     private func saveTask(withTitle task: String) {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
         
+        guard let entity = NSEntityDescription.entity(forEntityName: "Task", in: context) else { return }
+        
+        let taskObject = Task(entity: entity, insertInto: context)
+        taskObject.title = task
+        
+        do {
+            try context.save()
+        }catch let error as NSError {
+            print(error.localizedDescription)
+        }
     }
     
     // MARK: - Table view data source
