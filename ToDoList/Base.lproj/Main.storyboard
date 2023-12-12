@@ -3,7 +3,6 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
-        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -32,10 +31,14 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="ToDoList" id="Yt1-cT-5y1">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="g7K-z3-7UQ">
-                            <color key="tintColor" name="AccentColor"/>
+                        <barButtonItem key="leftBarButtonItem" systemItem="trash" id="Zwl-2s-CiR">
                             <connections>
-                                <action selector="addTask:" destination="cTW-cP-PoD" id="hM2-WB-NyF"/>
+                                <action selector="clearAllTAsks:" destination="cTW-cP-PoD" id="RYh-60-8Nr"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="wpz-K0-3kj">
+                            <connections>
+                                <action selector="addTask:" destination="cTW-cP-PoD" id="3E9-mq-YnD"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -64,9 +67,6 @@
         </scene>
     </scenes>
     <resources>
-        <namedColor name="AccentColor">
-            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
