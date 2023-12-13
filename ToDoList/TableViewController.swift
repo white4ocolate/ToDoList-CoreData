@@ -5,6 +5,7 @@ import CoreData
 class TableViewController: UITableViewController {
     
     var tasks: [Task] = []
+    var selectedTasks : [Int] = []
     
     @IBAction func addTask(_ sender: UIBarButtonItem) {
         let alertController = UIAlertController(title: "New Task", message: "Please add new task", preferredStyle: .alert)
@@ -24,18 +25,45 @@ class TableViewController: UITableViewController {
     }
     
     @IBAction func clearAll(_ sender: UIBarButtonItem) {
-        let alertController = UIAlertController(title: "Clear ToDoList", message: "Are you ssure you want clear ToDoList?", preferredStyle: .alert)
-        let clearAction = UIAlertAction(title: "Clear", style: .default) { action in
-            self.clearAllTasks()
-            self.tableView.reloadData()
+        var alertController = UIAlertController()
+        if selectedTasks.isEmpty {
+            alertController = UIAlertController(title: "Clear ToDoList", message: "Are you ssure you want clear ToDoList?", preferredStyle: .alert)
+            let clearAction = UIAlertAction(title: "Clear", style: .default) { action in
+                self.removeAllTasks()
+            }
+            alertController.addAction(clearAction)
+        } else {
+            alertController = UIAlertController(title: "Remove selected tasks", message: "Are you ssure you want remove selected tasks?", preferredStyle: .alert)
+            let clearAction = UIAlertAction(title: "Yes", style: .default) { action in
+                self.removeSelectedTasks(tasks: self.selectedTasks)
+                self.tableView.reloadData()
+            }
+            alertController.addAction(clearAction)
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .default)
-        alertController.addAction(clearAction)
         alertController.addAction(cancelAction)
         self.present(alertController, animated: true)
     }
     
-    private func clearAllTasks() {
+    private func removeSelectedTasks(tasks: [Int]) {
+        let context = getContext()
+        for task in tasks {
+            print("task")
+            print(task)
+            let contextTask = self.tasks[task]
+            context.delete(contextTask)
+        }
+        self.tasks = self.tasks.enumerated().filter{!tasks.contains($0.offset)}.map{ $0.element }
+        selectedTasks.removeAll()
+        do {
+            try context.save()
+        }catch let error as NSError {
+            print(error.localizedDescription)
+        }
+        self.tableView.reloadData()
+    }
+    
+    private func removeAllTasks() {
         let context = getContext()
         let fetchRequest: NSFetchRequest<Task> = Task.fetchRequest()
         if let objects = try? context.fetch(fetchRequest) {
@@ -43,12 +71,13 @@ class TableViewController: UITableViewController {
                 context.delete(object)
                 tasks.removeAll()
             }
+            do {
+                try context.save()
+            }catch let error as NSError {
+                print(error.localizedDescription)
+            }
         }
-        do {
-            try context.save()
-        }catch let error as NSError {
-            print(error.localizedDescription)
-        }
+        self.tableView.reloadData()
     }
     
     private func saveTask(withTitle task: String) {
@@ -106,6 +135,7 @@ class TableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         let task = tasks[indexPath.row]
         cell.textLabel?.text = task.title
+        cell.accessoryType = selectedTasks.contains(indexPath.row) ? .checkmark : .none
         
         return cell
     }
@@ -116,6 +146,7 @@ class TableViewController: UITableViewController {
             let task = tasks[indexPath.row]
             let context = getContext()
             context.delete(task)
+            tasks.remove(at: indexPath.row)
             do {
                 try context.save()
             }catch let error as NSError {
@@ -123,5 +154,19 @@ class TableViewController: UITableViewController {
             }
             self.tableView.reloadData()
         }
+    }
+    
+    //select row
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedRow = indexPath.row
+//        print(selectedRow)
+        if selectedTasks.contains(selectedRow) {
+            let index = selectedTasks.firstIndex(of: selectedRow)
+            selectedTasks.remove(at: index!)
+        } else {
+            selectedTasks.append(selectedRow)
+        }
+        print(selectedTasks)
+        tableView.reloadData()
     }
 }
