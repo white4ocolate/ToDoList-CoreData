@@ -33,7 +33,7 @@
                     <navigationItem key="navigationItem" title="ToDoList" id="Yt1-cT-5y1">
                         <barButtonItem key="leftBarButtonItem" systemItem="trash" id="Zwl-2s-CiR">
                             <connections>
-                                <action selector="clearAllTAsks:" destination="cTW-cP-PoD" id="RYh-60-8Nr"/>
+                                <action selector="clearAll:" destination="cTW-cP-PoD" id="CGP-aU-dsh"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="wpz-K0-3kj">
