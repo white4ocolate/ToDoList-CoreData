@@ -27,13 +27,13 @@ class TableViewController: UITableViewController {
     @IBAction func clearAll(_ sender: UIBarButtonItem) {
         var alertController = UIAlertController()
         if selectedTasks.isEmpty {
-            alertController = UIAlertController(title: "Clear ToDoList", message: "Are you ssure you want clear ToDoList?", preferredStyle: .alert)
+            alertController = UIAlertController(title: "Clear ToDoList", message: "Are you sure you want clear ToDoList?", preferredStyle: .alert)
             let clearAction = UIAlertAction(title: "Clear", style: .default) { action in
                 self.removeAllTasks()
             }
             alertController.addAction(clearAction)
         } else {
-            alertController = UIAlertController(title: "Remove selected tasks", message: "Are you ssure you want remove selected tasks?", preferredStyle: .alert)
+            alertController = UIAlertController(title: "Remove selected tasks", message: "Are you sure you want remove selected tasks?", preferredStyle: .alert)
             let clearAction = UIAlertAction(title: "Yes", style: .default) { action in
                 self.removeSelectedTasks(tasks: self.selectedTasks)
                 self.tableView.reloadData()
